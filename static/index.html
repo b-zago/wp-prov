@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WP Fleet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-mark">W</span>
+        <span class="logo-text">WP Fleet</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="instances">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect
+              x="1"
+              y="1"
+              width="6"
+              height="6"
+              rx="1.5"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+            <rect
+              x="9"
+              y="1"
+              width="6"
+              height="6"
+              rx="1.5"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+            <rect
+              x="1"
+              y="9"
+              width="6"
+              height="6"
+              rx="1.5"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+            <rect
+              x="9"
+              y="9"
+              width="6"
+              height="6"
+              rx="1.5"
+              stroke="currentColor"
+              stroke-width="1.2"
+            />
+          </svg>
+          Instances
+        </button>
+        <button class="nav-item" data-view="deploy">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M8 2v12M2 8h12"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            />
+          </svg>
+          Deploy
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="status-dot" id="api-status-dot"></div>
+        <span id="api-status-text">Connecting...</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- Instances view -->
+      <section class="view active" id="view-instances">
+        <header class="view-header">
+          <div>
+            <h1>Instances</h1>
+            <p class="view-sub">All running WordPress deployments</p>
+          </div>
+          <button class="btn-refresh" id="btn-refresh" title="Refresh">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <path
+                d="M13 7.5A5.5 5.5 0 1 1 7.5 2a5.48 5.48 0 0 1 3.89 1.61L13 2"
+                stroke="currentColor"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M13 2v3.5H9.5"
+                stroke="currentColor"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Refresh
+          </button>
+        </header>
+
+        <div class="stats-row" id="stats-row">
+          <div class="stat-card">
+            <span class="stat-label">Total</span>
+            <span class="stat-value" id="stat-total">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Healthy</span>
+            <span class="stat-value success" id="stat-healthy">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Synced</span>
+            <span class="stat-value" id="stat-synced">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Degraded</span>
+            <span class="stat-value danger" id="stat-degraded">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Capacity</span>
+            <span class="stat-value" id="stat-capacity">—</span>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="instance-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Namespace</th>
+                <th>SFTP Port</th>
+                <th>Health</th>
+                <th>Sync</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="instances-tbody">
+              <tr class="placeholder-row">
+                <td colspan="7">Loading instances...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Deploy view -->
+      <section class="view" id="view-deploy">
+        <header class="view-header">
+          <div>
+            <h1>Deploy instance</h1>
+            <p class="view-sub">Provision a new WordPress deployment</p>
+          </div>
+        </header>
+
+        <div class="form-layout">
+          <form id="deploy-form" novalidate>
+            <fieldset>
+              <legend>General</legend>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="releaseName">Release name</label>
+                  <input
+                    type="text"
+                    id="releaseName"
+                    name="releaseName"
+                    placeholder="my-site"
+                    autocomplete="off"
+                  />
+                  <span class="field-hint"
+                    >Lowercase, alphanumeric, hyphens only</span
+                  >
+                </div>
+                <div class="field">
+                  <label for="url">Site URL</label>
+                  <input
+                    type="text"
+                    id="url"
+                    name="url"
+                    placeholder="https://my-site.example.com"
+                  />
+                </div>
+                <div class="field">
+                  <label for="title">Site title</label>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="My WordPress Site"
+                  />
+                </div>
+                <div class="field">
+                  <label for="wpMail">Admin email</label>
+                  <input
+                    type="email"
+                    id="wpMail"
+                    name="wpMail"
+                    placeholder="admin@example.com"
+                  />
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>WordPress credentials</legend>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="wpUser">Admin username</label>
+                  <input
+                    type="text"
+                    id="wpUser"
+                    name="wpUser"
+                    placeholder="admin"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="field">
+                  <label for="wpPassword">Admin password</label>
+                  <input
+                    type="password"
+                    id="wpPassword"
+                    name="wpPassword"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Database</legend>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="dbUser">DB username</label>
+                  <input
+                    type="text"
+                    id="dbUser"
+                    name="dbUser"
+                    placeholder="wordpress"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="field">
+                  <label for="dbPassword">DB password</label>
+                  <input
+                    type="password"
+                    id="dbPassword"
+                    name="dbPassword"
+                    placeholder="••••••••"
+                  />
+                </div>
+                <div class="field">
+                  <label for="dbRootPassword">DB root password</label>
+                  <input
+                    type="password"
+                    id="dbRootPassword"
+                    name="dbRootPassword"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>SFTP</legend>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="sftpUser">SFTP username</label>
+                  <input
+                    type="text"
+                    id="sftpUser"
+                    name="sftpUser"
+                    placeholder="sftpuser"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="field">
+                  <label for="sftpPassword">SFTP password</label>
+                  <input
+                    type="password"
+                    id="sftpPassword"
+                    name="sftpPassword"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+              <p class="field-hint">Port is assigned automatically</p>
+            </fieldset>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" id="btn-deploy">
+                <span id="btn-deploy-label">Deploy</span>
+                <svg
+                  id="btn-deploy-spinner"
+                  class="spinner hidden"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 15 15"
+                >
+                  <circle
+                    cx="7.5"
+                    cy="7.5"
+                    r="5.5"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-dasharray="28"
+                    stroke-dashoffset="10"
+                    fill="none"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          <div id="deploy-result" class="deploy-result hidden"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Delete confirm modal -->
+    <div class="modal-backdrop hidden" id="modal-backdrop">
+      <div class="modal">
+        <h2>Delete instance?</h2>
+        <p id="modal-message">
+          This will remove the ArgoCD application and all associated resources.
+          This cannot be undone.
+        </p>
+        <div class="modal-actions">
+          <button class="btn-ghost" id="modal-cancel">Cancel</button>
+          <button class="btn-danger" id="modal-confirm">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

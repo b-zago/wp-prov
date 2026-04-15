@@ -180,6 +180,7 @@ def list_fleet_instances(argocd_api: client.CustomObjectsApi) -> list[dict]:
 
 
 def ensure_namespace(name: str):
+    config.load_incluster_config()
     core_api = client.CoreV1Api()
     try:
         core_api.create_namespace(

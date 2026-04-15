@@ -1,0 +1,467 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  html,
+  body {
+    @apply h-full bg-surface-base text-ink font-sans antialiased;
+  }
+
+  body {
+    background-image:
+      radial-gradient(
+        ellipse 80% 60% at 0% 0%,
+        rgba(34, 211, 238, 0.08),
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 60% 50% at 100% 0%,
+        rgba(139, 92, 246, 0.07),
+        transparent 60%
+      );
+    background-attachment: fixed;
+  }
+
+  * {
+    @apply border-line;
+  }
+
+  input,
+  button,
+  select,
+  textarea {
+    @apply font-sans;
+  }
+}
+
+/* ==========================================================================
+   Layout shell
+   ========================================================================== */
+
+@layer components {
+  .app-shell {
+    @apply flex min-h-screen;
+  }
+
+  .app-main {
+    @apply flex-1 min-w-0 px-6 py-8 md:px-10 md:py-10;
+  }
+
+  .app-main-inner {
+    @apply mx-auto w-full max-w-6xl;
+  }
+
+  /* ---- Sidebar ---- */
+
+  .sidebar {
+    @apply hidden md:flex w-60 shrink-0 flex-col sticky top-0 h-screen
+           border-r border-line bg-surface-raised/60 backdrop-blur-sm;
+  }
+
+  .sidebar-header {
+    @apply flex items-center gap-3 px-5 py-5 border-b border-line;
+  }
+
+  .sidebar-logo {
+    @apply grid place-items-center h-9 w-9 rounded-lg
+           bg-gradient-to-br from-brand-400 to-violet-500
+           text-surface-base font-bold text-[15px] tracking-tight
+           shadow-glow;
+  }
+
+  .sidebar-title {
+    @apply text-[15px] font-semibold tracking-tight text-ink;
+  }
+
+  .sidebar-title-dim {
+    @apply text-[11px] uppercase tracking-[0.15em] text-ink-dim font-medium;
+  }
+
+  .sidebar-nav {
+    @apply flex-1 flex flex-col gap-1 px-3 py-4;
+  }
+
+  .sidebar-nav-item {
+    @apply flex items-center gap-2.5 px-3 py-2 rounded-lg
+           text-[13.5px] font-medium text-ink-muted
+           hover:bg-surface-hover hover:text-ink
+           transition-colors cursor-pointer select-none
+           border border-transparent;
+  }
+
+  .sidebar-nav-item.is-active {
+    @apply bg-brand-400/10 text-brand-300 border-brand-400/30;
+  }
+
+  .sidebar-nav-item.is-disabled {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+  }
+
+  .sidebar-footer {
+    @apply px-5 py-4 border-t border-line flex items-center gap-2
+           text-xs text-ink-muted;
+  }
+
+  /* ---- Page header ---- */
+
+  .page-header {
+    @apply flex items-start justify-between gap-4 mb-8;
+  }
+
+  .page-title {
+    @apply text-[26px] font-semibold tracking-tight text-ink leading-tight;
+  }
+
+  .page-subtitle {
+    @apply text-[13.5px] text-ink-muted mt-1;
+  }
+}
+
+/* ==========================================================================
+   Stat cards
+   ========================================================================== */
+
+@layer components {
+  .stats-grid {
+    @apply grid grid-cols-2 lg:grid-cols-5 gap-3 mb-8;
+  }
+
+  .stat-card {
+    @apply rounded-xl2 border border-line bg-surface-raised/70
+           px-4 py-4 flex flex-col gap-1 shadow-card
+           transition-colors hover:border-line-strong;
+  }
+
+  .stat-label {
+    @apply text-[11px] uppercase tracking-[0.1em] text-ink-dim font-medium;
+  }
+
+  .stat-value {
+    @apply text-2xl font-semibold text-ink font-mono tabular-nums;
+  }
+
+  .stat-value.is-success {
+    @apply text-emerald-400;
+  }
+  .stat-value.is-danger {
+    @apply text-rose-400;
+  }
+  .stat-value.is-warn {
+    @apply text-amber-400;
+  }
+}
+
+/* ==========================================================================
+   Table
+   ========================================================================== */
+
+@layer components {
+  .table-wrap {
+    @apply rounded-xl2 border border-line bg-surface-raised/50
+           overflow-hidden shadow-card;
+  }
+
+  .instance-table {
+    @apply w-full text-[13px] border-collapse;
+  }
+
+  .instance-table thead tr {
+    @apply bg-surface-sunken/60 border-b border-line;
+  }
+
+  .instance-table th {
+    @apply text-left px-4 py-3
+           text-[11px] font-medium uppercase tracking-[0.08em]
+           text-ink-dim;
+  }
+
+  .instance-table td {
+    @apply px-4 py-3.5 border-b border-line text-ink align-middle;
+  }
+
+  .instance-table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .instance-table tbody tr:hover td {
+    @apply bg-surface-hover/50;
+  }
+
+  .instance-table .name-cell {
+    @apply font-semibold text-[13.5px];
+  }
+
+  .instance-table .mono {
+    @apply font-mono text-[12.5px] text-ink-muted;
+  }
+
+  .instance-table .url-link {
+    @apply text-brand-300 hover:text-brand-200 hover:underline
+           underline-offset-2 decoration-brand-400/40;
+  }
+
+  .placeholder-row td {
+    @apply text-center py-16 text-ink-dim text-[13px];
+  }
+}
+
+/* ==========================================================================
+   Badges
+   ========================================================================== */
+
+@layer components {
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full
+           text-[11.5px] font-medium border border-transparent
+           whitespace-nowrap;
+  }
+
+  .badge-dot {
+    @apply w-1.5 h-1.5 rounded-full shrink-0;
+  }
+
+  .badge-healthy {
+    @apply bg-emerald-500/10 text-emerald-300 border-emerald-500/25;
+  }
+  .badge-healthy .badge-dot {
+    @apply bg-emerald-400;
+  }
+
+  .badge-danger {
+    @apply bg-rose-500/10 text-rose-300 border-rose-500/25;
+  }
+  .badge-danger .badge-dot {
+    @apply bg-rose-400;
+  }
+
+  .badge-warn {
+    @apply bg-amber-500/10 text-amber-300 border-amber-500/25;
+  }
+  .badge-warn .badge-dot {
+    @apply bg-amber-400;
+  }
+
+  .badge-info {
+    @apply bg-brand-400/10 text-brand-200 border-brand-400/30;
+  }
+  .badge-info .badge-dot {
+    @apply bg-brand-400;
+  }
+
+  .badge-neutral {
+    @apply bg-surface-hover text-ink-muted border-line-strong;
+  }
+  .badge-neutral .badge-dot {
+    @apply bg-ink-muted;
+  }
+}
+
+/* ==========================================================================
+   Status dot (API indicator)
+   ========================================================================== */
+
+@layer components {
+  .status-dot {
+    @apply w-2 h-2 rounded-full bg-ink-dim transition-colors;
+  }
+  .status-dot.is-ok {
+    @apply bg-emerald-400 shadow-[0_0_0_3px_rgba(52,211,153,0.12)];
+  }
+  .status-dot.is-err {
+    @apply bg-rose-400 shadow-[0_0_0_3px_rgba(251,113,133,0.12)];
+  }
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2
+           px-4 py-2 rounded-lg text-[13.5px] font-medium
+           transition-all select-none cursor-pointer
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn text-surface-base
+           bg-gradient-to-r from-brand-400 to-brand-500
+           hover:from-brand-300 hover:to-brand-400
+           shadow-[0_6px_20px_-8px_rgba(34,211,238,0.5)]
+           disabled:from-brand-500 disabled:to-brand-600;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-ink-muted border border-line-strong
+           hover:bg-surface-hover hover:text-ink;
+  }
+
+  .btn-danger {
+    @apply btn bg-rose-500/10 text-rose-300 border border-rose-500/25
+           hover:bg-rose-500/20 hover:text-rose-200;
+  }
+
+  .btn-icon {
+    @apply grid place-items-center h-8 w-8 rounded-md
+           text-ink-dim hover:text-ink hover:bg-surface-hover
+           transition-colors cursor-pointer;
+  }
+
+  .btn-icon-danger {
+    @apply btn-icon hover:text-rose-300 hover:bg-rose-500/10;
+  }
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+@layer components {
+  .form-shell {
+    @apply max-w-3xl flex flex-col gap-5;
+  }
+
+  .form-section {
+    @apply rounded-xl2 border border-line bg-surface-raised/60
+           p-5 md:p-6 shadow-card;
+  }
+
+  .form-legend {
+    @apply text-[11px] font-medium uppercase tracking-[0.1em]
+           text-ink-muted mb-4 flex items-center gap-2;
+  }
+
+  .form-legend::before {
+    content: "";
+    @apply h-1 w-1 rounded-full bg-brand-400;
+  }
+
+  .field-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .field {
+    @apply flex flex-col gap-1.5;
+  }
+
+  .field-label {
+    @apply text-[12.5px] font-medium text-ink-muted;
+  }
+
+  .field-input {
+    @apply bg-surface-sunken/80 border border-line-strong rounded-lg
+           px-3 py-2.5 text-[13.5px] text-ink
+           placeholder:text-ink-dim outline-none
+           transition-colors
+           focus:border-brand-400 focus:ring-2 focus:ring-brand-400/20;
+  }
+
+  .field-input.is-error {
+    @apply border-rose-500/60 focus:border-rose-400 focus:ring-rose-400/20;
+  }
+
+  .field-hint {
+    @apply text-[11.5px] text-ink-dim;
+  }
+
+  .form-actions {
+    @apply flex items-center gap-3 pt-1;
+  }
+
+  /* Deploy result banner */
+
+  .result-banner {
+    @apply rounded-xl2 border p-4 text-[13.5px] leading-relaxed;
+  }
+  .result-banner.is-success {
+    @apply bg-emerald-500/5 border-emerald-500/25 text-emerald-200;
+  }
+  .result-banner.is-error {
+    @apply bg-rose-500/5 border-rose-500/25 text-rose-200;
+  }
+
+  .result-title {
+    @apply font-semibold mb-2 text-current;
+  }
+  .result-row {
+    @apply flex gap-3 py-0.5 text-[13px];
+  }
+  .result-key {
+    @apply opacity-60 min-w-[90px];
+  }
+  .result-val {
+    @apply font-mono text-[12.5px];
+  }
+}
+
+/* ==========================================================================
+   Modal
+   ========================================================================== */
+
+@layer components {
+  .modal-backdrop {
+    @apply fixed inset-0 z-50 grid place-items-center
+           bg-black/60 backdrop-blur-sm p-4
+           animate-[fadeIn_0.15s_ease-out];
+  }
+
+  .modal {
+    @apply w-full max-w-md rounded-xl2 border border-line-strong
+           bg-surface-raised shadow-2xl p-6
+           animate-[popIn_0.18s_ease-out];
+  }
+
+  .modal-title {
+    @apply text-[17px] font-semibold text-ink mb-2;
+  }
+
+  .modal-body {
+    @apply text-[13.5px] text-ink-muted leading-relaxed mb-6;
+  }
+
+  .modal-actions {
+    @apply flex justify-end gap-2;
+  }
+}
+
+/* ==========================================================================
+   Animations & utils
+   ========================================================================== */
+
+@layer utilities {
+  .spinner {
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes popIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

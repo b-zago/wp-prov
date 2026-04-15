@@ -1,0 +1,62 @@
+{
+  "name": "wp-prov",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/usr/src/app",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+
+  "forwardPorts": [8000, 4321],
+  "portsAttributes": {
+    "8000": {
+      "label": "FastAPI",
+      "onAutoForward": "notify"
+    },
+    "4321": {
+      "label": "Astro dev",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylance",
+        "ms-python.black-formatter",
+        "astro-build.astro-vscode",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.analysis.typeCheckingMode": "basic",
+        "editor.formatOnSave": true,
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter"
+        },
+        "[astro]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[css]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "tailwindCSS.includeLanguages": {
+          "astro": "html"
+        },
+        "tailwindCSS.experimental.classRegex": [
+          ["@apply\\s+([^;]*);", "([^\\s]+)"]
+        ]
+      }
+    }
+  },
+
+  "postCreateCommand": "pip install -r requirements.txt && cd frontend && npm install",
+  "postStartCommand": "echo 'Backend: uvicorn already running on :8000 | Frontend dev: cd frontend && npm run dev  (opens :4321)'",
+
+  "remoteUser": "root"
+}

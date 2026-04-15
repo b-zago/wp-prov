@@ -15,7 +15,9 @@ from argocd import (
     ensure_namespace,
     get_argocd_client,
     get_instance_count,
+    get_networking_client,
     get_next_sftp_port,
+    get_used_ingress_hosts,
     list_fleet_instances,
 )
 from config import DEV_MODE, MAX_INSTANCES, SUBDOMAIN_DOMAIN, TARGET_NAMESPACE
@@ -44,11 +46,11 @@ def read_root():
 
 @app.post("/api/deploy")
 def deploy(req: DeployRequest):
-    full_url = f"https://{req.subdomain}.{SUBDOMAIN_DOMAIN}"
+    host = f"{req.subdomain}.{SUBDOMAIN_DOMAIN}"
 
     if DEV_MODE:
         try:
-            port = dev_store.create(req.releaseName, full_url)
+            port = dev_store.create(req.releaseName, host)
         except dev_store.DevStoreError as e:
             raise HTTPException(status_code=e.status_code, detail=str(e))
         return {
@@ -59,6 +61,7 @@ def deploy(req: DeployRequest):
         }
 
     argocd_api = get_argocd_client()
+    networking_api = get_networking_client()
 
     if application_exists(argocd_api, req.releaseName):
         raise HTTPException(
@@ -66,6 +69,19 @@ def deploy(req: DeployRequest):
         )
 
     with port_lock:
+        try:
+            used_hosts = get_used_ingress_hosts(networking_api)
+        except ApiException as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to check ingress host availability: {e.reason}",
+            )
+        if host in used_hosts:
+            raise HTTPException(
+                status_code=409,
+                detail=f"Subdomain '{req.subdomain}' is already in use.",
+            )
+
         if get_instance_count(argocd_api) >= MAX_INSTANCES:
             raise HTTPException(
                 status_code=409,
@@ -78,7 +94,7 @@ def deploy(req: DeployRequest):
         sftp_port = get_next_sftp_port(argocd_api)
 
         helm_values = {
-            "url": full_url,
+            "url": host,
             "title": req.title,
             "wpMail": req.wpMail,
             "dbUser": req.dbUser,

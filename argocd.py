@@ -18,6 +18,11 @@ def get_argocd_client() -> client.CustomObjectsApi:
     return client.CustomObjectsApi()
 
 
+def get_networking_client() -> client.NetworkingV1Api:
+    config.load_incluster_config()
+    return client.NetworkingV1Api()
+
+
 def _list_fleet_apps(argocd_api: client.CustomObjectsApi) -> list[dict]:
     apps = argocd_api.list_namespaced_custom_object(
         group="argoproj.io",
@@ -68,6 +73,19 @@ def get_next_sftp_port(argocd_api: client.CustomObjectsApi) -> int:
     while port in used:
         port += 1
     return port
+
+
+# --- Ingress host uniqueness ----------------------------------------------
+
+def get_used_ingress_hosts(networking_api: client.NetworkingV1Api) -> set[str]:
+    ingresses = networking_api.list_ingress_for_all_namespaces()
+    hosts: set[str] = set()
+    for ing in ingresses.items:
+        rules = (ing.spec.rules or []) if ing.spec else []
+        for rule in rules:
+            if rule.host:
+                hosts.add(rule.host)
+    return hosts
 
 
 # --- Instance count --------------------------------------------------------

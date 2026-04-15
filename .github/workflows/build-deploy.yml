@@ -26,7 +26,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Smoke test — FastAPI responds 200 on /
+      - name: Test server responds 200 on /
         run: |
           # Run in dev mode so the startup hook doesn't try to reach a cluster.
           docker run -d --name app -p 8000:8000 -e WP_PROV_DEV=1 wp-prov:ci
@@ -38,7 +38,7 @@ jobs:
             fi
             sleep 1
           done
-          echo "Smoke test failed"
+          echo "Server test failed"
           docker logs app
           docker rm -f app
           exit 1

@@ -9,6 +9,7 @@ A web app for provisioning and managing WordPress instances in a Kubernetes clus
 - View all running instances with their live sync and health status from ArgoCD
 - Delete instances directly from the UI
 - Set `WP_PROV_DEV=1` to run in dev mode — no cluster needed, uses an in-memory fake store
+- Set `PROD_DEPLOY=0` to deploy WordPress instances to a namespace made for stage environment
 
 ## Stack
 

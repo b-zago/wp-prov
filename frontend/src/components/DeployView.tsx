@@ -152,9 +152,9 @@ export default function DeployView({
     : `your-subdomain${SUBDOMAIN_SUFFIX}`;
 
   return (
-    <section>
-      <header className="page-header">
-        <div>
+    <section className="w-full max-w-3xl mx-auto">
+      <header className="page-header text-center sm:text-left">
+        <div className="w-full">
           <h1 className="page-title">Deploy instance</h1>
           <p className="page-subtitle">
             Provision a new WordPress deployment

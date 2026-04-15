@@ -45,15 +45,47 @@
 
 @layer components {
   .app-shell {
-    @apply flex min-h-screen;
+    @apply min-h-screen md:flex;
   }
 
   .app-main {
-    @apply flex-1 min-w-0 px-6 py-8 md:px-10 md:py-10;
+    @apply flex-1 min-w-0 px-4 sm:px-6 md:px-10 py-6 md:py-10;
   }
 
   .app-main-inner {
     @apply mx-auto w-full max-w-6xl;
+  }
+
+  /* ---- Mobile top nav (shown below md) ---- */
+
+  .mobile-nav {
+    @apply md:hidden sticky top-0 z-40
+           flex items-center gap-3 px-4 py-3
+           border-b border-line bg-surface-raised/80 backdrop-blur-sm;
+  }
+
+  .mobile-nav-brand {
+    @apply flex items-center gap-2 mr-auto min-w-0;
+  }
+
+  .mobile-nav-tabs {
+    @apply flex items-center gap-1;
+  }
+
+  .mobile-nav-tab {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+           text-[13px] font-medium text-ink-muted
+           hover:bg-surface-hover hover:text-ink
+           transition-colors cursor-pointer select-none
+           border border-transparent;
+  }
+
+  .mobile-nav-tab.is-active {
+    @apply bg-brand-400/10 text-brand-300 border-brand-400/30;
+  }
+
+  .mobile-nav-tab.is-disabled {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
   }
 
   /* ---- Sidebar ---- */
@@ -110,15 +142,15 @@
   /* ---- Page header ---- */
 
   .page-header {
-    @apply flex items-start justify-between gap-4 mb-8;
+    @apply flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-8;
   }
 
   .page-title {
-    @apply text-[26px] font-semibold tracking-tight text-ink leading-tight;
+    @apply text-[22px] sm:text-[26px] font-semibold tracking-tight text-ink leading-tight;
   }
 
   .page-subtitle {
-    @apply text-[13.5px] text-ink-muted mt-1;
+    @apply text-[13px] sm:text-[13.5px] text-ink-muted mt-1;
   }
 }
 
@@ -163,11 +195,11 @@
 @layer components {
   .table-wrap {
     @apply rounded-xl2 border border-line bg-surface-raised/50
-           overflow-hidden shadow-card;
+           overflow-x-auto shadow-card;
   }
 
   .instance-table {
-    @apply w-full text-[13px] border-collapse;
+    @apply w-full text-[13px] border-collapse min-w-[720px];
   }
 
   .instance-table thead tr {
@@ -324,12 +356,12 @@
 
 @layer components {
   .form-shell {
-    @apply max-w-3xl flex flex-col gap-5;
+    @apply w-full max-w-3xl mx-auto flex flex-col gap-5;
   }
 
   .form-section {
     @apply rounded-xl2 border border-line bg-surface-raised/60
-           p-5 md:p-6 shadow-card;
+           p-4 sm:p-5 md:p-6 shadow-card;
   }
 
   .form-legend {
@@ -343,7 +375,7 @@
   }
 
   .field-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-4;
   }
 
   .field {

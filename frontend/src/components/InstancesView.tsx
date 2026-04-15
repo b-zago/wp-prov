@@ -32,8 +32,7 @@ export default function InstancesView({
   ).length;
 
   const atLimit = limit !== null && total >= limit;
-  const capacityLabel =
-    limit !== null ? `${total} / ${limit}` : String(total);
+  const capacityLabel = limit !== null ? `${total} / ${limit}` : String(total);
   const capacityClass = atLimit
     ? "is-danger"
     : limit !== null && total >= limit * 0.8
@@ -122,7 +121,7 @@ export default function InstancesView({
                   <td>
                     {inst.url ? (
                       <a
-                        href={inst.url}
+                        href={"https://" + inst.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="url-link inline-flex items-center gap-1.5"

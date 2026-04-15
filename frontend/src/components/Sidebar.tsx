@@ -52,43 +52,80 @@ export default function Sidebar({
         : "status-dot";
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-header">
-        <div className="sidebar-logo" aria-hidden>
-          w
+    <>
+      <header className="mobile-nav">
+        <div className="mobile-nav-brand">
+          <div className="sidebar-logo" aria-hidden>
+            w
+          </div>
+          <span className="sidebar-title truncate">wp-prov</span>
         </div>
-        <div className="flex flex-col leading-tight">
-          <span className="sidebar-title">wp-prov</span>
-          <span className="sidebar-title-dim">Provisioner</span>
+        <nav className="mobile-nav-tabs" aria-label="Primary">
+          {items.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={[
+                "mobile-nav-tab",
+                view === item.id ? "is-active" : "",
+                item.disabled ? "is-disabled" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              disabled={item.disabled}
+              title={item.title}
+              onClick={() => !item.disabled && onNavigate(item.id)}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </nav>
+        <span
+          className={statusClass}
+          aria-label={statusText}
+          title={statusText}
+        />
+      </header>
+
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <div className="sidebar-logo" aria-hidden>
+            w
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="sidebar-title">wp-prov</span>
+            <span className="sidebar-title-dim">Provisioner</span>
+          </div>
         </div>
-      </div>
 
-      <nav className="sidebar-nav" aria-label="Primary">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            className={[
-              "sidebar-nav-item",
-              view === item.id ? "is-active" : "",
-              item.disabled ? "is-disabled" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            disabled={item.disabled}
-            title={item.title}
-            onClick={() => !item.disabled && onNavigate(item.id)}
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </button>
-        ))}
-      </nav>
+        <nav className="sidebar-nav" aria-label="Primary">
+          {items.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={[
+                "sidebar-nav-item",
+                view === item.id ? "is-active" : "",
+                item.disabled ? "is-disabled" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              disabled={item.disabled}
+              title={item.title}
+              onClick={() => !item.disabled && onNavigate(item.id)}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </nav>
 
-      <div className="sidebar-footer">
-        <span className={statusClass} aria-hidden />
-        <span>{statusText}</span>
-      </div>
-    </aside>
+        <div className="sidebar-footer">
+          <span className={statusClass} aria-hidden />
+          <span>{statusText}</span>
+        </div>
+      </aside>
+    </>
   );
 }

@@ -24,3 +24,5 @@ docker compose up   # starts backend + frontend with hot-reload (dev mode, no cl
 ```
 
 In production, the app runs inside the cluster using an in-cluster ServiceAccount with permissions to manage ArgoCD `Application` resources as well as `namespaces` and `ingresses`.
+
+See the whole infrastructure at https://github.com/b-zago/k3d-infra
